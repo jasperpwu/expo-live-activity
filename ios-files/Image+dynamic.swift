@@ -5,7 +5,21 @@ extension Image {
     NSLog("[LiveActivity] Attempting to load image: \(assetNameOrPath)")
 
     // Use configurable app group identifier from Info.plist
-    let groupIdentifier = Bundle.main.object(forInfoDictionaryKey: "AppGroupIdentifier") as? String ?? "group.expoLiveActivity.sharedData"
+    guard let groupIdentifier = Bundle.main.object(forInfoDictionaryKey: "AppGroupIdentifier") as? String else {
+      NSLog("[LiveActivity] ❌ AppGroupIdentifier not found in Info.plist")
+      NSLog("[LiveActivity] 🔄 Falling back to bundle asset: \(assetNameOrPath)")
+
+      // Try to load from Asset Catalog first
+      if let uiImage = UIImage(named: assetNameOrPath) {
+        NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath) - Size: \(uiImage.size)")
+        return Image(uiImage: uiImage)
+          .renderingMode(.original) // Ensure image renders correctly
+      }
+
+      // Fallback to SwiftUI Image initializer
+      NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer: \(assetNameOrPath)")
+      return Image(assetNameOrPath)
+    }
     NSLog("[LiveActivity] Attempting to access app group: \(groupIdentifier)")
 
     if let container = FileManager.default.containerURL(
