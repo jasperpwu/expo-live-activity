@@ -45,11 +45,17 @@ struct LiveActivityWidget: Widget {
             .applyWidgetURL(from: context.attributes.deepLinkUrl)
         }
         DynamicIslandExpandedRegion(.trailing) {
-          if let imageName = context.state.imageName {
-            dynamicIslandExpandedTrailing(imageName: imageName)
-              .padding(.trailing, 5)
-              .applyWidgetURL(from: context.attributes.deepLinkUrl)
-          }
+          dynamicIslandExpandedTrailing(imageName: {
+            let imageName = context.state.imageName ?? "default-coffee-bean"
+            if context.state.imageName == nil {
+              NSLog("[LiveActivity] Using default coffee bean image for Dynamic Island expanded")
+            } else {
+              NSLog("[LiveActivity] Using custom image for Dynamic Island expanded: \(context.state.imageName!)")
+            }
+            return imageName
+          }())
+            .padding(.trailing, 5)
+            .applyWidgetURL(from: context.attributes.deepLinkUrl)
         }
         DynamicIslandExpandedRegion(.bottom) {
           if let date = context.state.timerEndDateInMilliseconds {
@@ -61,11 +67,17 @@ struct LiveActivityWidget: Widget {
           }
         }
       } compactLeading: {
-        if let dynamicIslandImageName = context.state.dynamicIslandImageName {
-          resizableImage(imageName: dynamicIslandImageName)
-            .frame(maxWidth: 23, maxHeight: 23)
-            .applyWidgetURL(from: context.attributes.deepLinkUrl)
-        }
+        resizableImage(imageName: {
+          let imageName = context.state.dynamicIslandImageName ?? "default-coffee-bean"
+          if context.state.dynamicIslandImageName == nil {
+            NSLog("[LiveActivity] Using default coffee bean image for Dynamic Island compact")
+          } else {
+            NSLog("[LiveActivity] Using custom image for Dynamic Island compact: \(context.state.dynamicIslandImageName!)")
+          }
+          return imageName
+        }())
+          .frame(maxWidth: 23, maxHeight: 23)
+          .applyWidgetURL(from: context.attributes.deepLinkUrl)
       } compactTrailing: {
         if let date = context.state.timerEndDateInMilliseconds {
           compactTimer(

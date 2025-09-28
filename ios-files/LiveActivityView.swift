@@ -41,15 +41,23 @@ import WidgetKit
 
           Spacer()
 
-          if let imageName = contentState.imageName {
-            resizableImage(imageName: imageName)
-              .frame(maxHeight: 64)
-          }
+          resizableImage(imageName: {
+            let imageName = contentState.imageName ?? "default-coffee-bean"
+            if contentState.imageName == nil {
+              NSLog("[LiveActivity] Using default coffee bean image for banner")
+            } else {
+              NSLog("[LiveActivity] Using custom image for banner: \(contentState.imageName!)")
+            }
+            return imageName
+          }())
+            .frame(maxHeight: 64)
         }
 
         if let date = contentState.timerEndDateInMilliseconds {
-          ProgressView(timerInterval: Date.toTimerInterval(miliseconds: date))
-            .tint(progressViewTint)
+          Text(timerInterval: Date.toTimerInterval(miliseconds: date))
+            .font(.system(size: 28, weight: .bold, design: .monospaced))
+            .minimumScaleFactor(0.8)
+            .multilineTextAlignment(.center)
             .modifier(ConditionalForegroundViewModifier(color: attributes.progressViewLabelColor))
         } else if let progress = contentState.progress {
           ProgressView(value: progress)
