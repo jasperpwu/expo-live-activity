@@ -4,20 +4,20 @@ interface Options {
   groupIdentifier?: string
 }
 
-export function getWidgetExtensionEntitlements(_iosConfig: ExportedConfig['ios'], _options: Options | undefined = {}) {
+export function getWidgetExtensionEntitlements(_iosConfig: ExportedConfig['ios'], options: Options | undefined = {}) {
   const entitlements: InfoPlist = {}
 
-  addApplicationGroupsEntitlement(entitlements)
+  addApplicationGroupsEntitlement(entitlements, options.groupIdentifier)
 
   return entitlements
 }
 
 export function addApplicationGroupsEntitlement(entitlements: InfoPlist, groupIdentifier?: string) {
-  // if (groupIdentifier) {
-  //   const existingApplicationGroups = (entitlements["com.apple.security.application-groups"] as string[]) ?? [];
+  if (groupIdentifier) {
+    const existingApplicationGroups = (entitlements["com.apple.security.application-groups"] as string[]) ?? [];
 
-  //   entitlements["com.apple.security.application-groups"] = [groupIdentifier, ...existingApplicationGroups];
-  // }
+    entitlements["com.apple.security.application-groups"] = [groupIdentifier, ...existingApplicationGroups];
+  }
 
   return entitlements
 }
