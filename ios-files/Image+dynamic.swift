@@ -31,13 +31,14 @@ extension Image {
 
     NSLog("[LiveActivity] 🔄 Falling back to bundle asset: \(assetNameOrPath)")
 
-    // Log whether the bundle asset exists
-    if Bundle.main.path(forResource: assetNameOrPath, ofType: nil) != nil {
-      NSLog("[LiveActivity] ✅ Bundle asset found: \(assetNameOrPath)")
-    } else {
-      NSLog("[LiveActivity] ⚠️ Bundle asset not found: \(assetNameOrPath) - image may not display")
+    // Try to load from Asset Catalog first
+    if let uiImage = UIImage(named: assetNameOrPath) {
+      NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath)")
+      return Image(uiImage: uiImage)
     }
 
+    // Fallback to SwiftUI Image initializer
+    NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer: \(assetNameOrPath)")
     return Image(assetNameOrPath)
   }
 }
