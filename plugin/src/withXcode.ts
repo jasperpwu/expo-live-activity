@@ -14,7 +14,8 @@ export const withXcode: ConfigPlugin<{
   targetName: string
   bundleIdentifier: string
   deploymentTarget: string
-}> = (config, { targetName, bundleIdentifier, deploymentTarget }) => {
+  appGroupIdentifier: string
+}> = (config, { targetName, bundleIdentifier, deploymentTarget, appGroupIdentifier }) => {
   return withXcodeProject(config, (config) => {
     const xcodeProject = config.modResults
     const targetUuid = xcodeProject.generateUuid()
@@ -32,6 +33,7 @@ export const withXcode: ConfigPlugin<{
       bundleIdentifier,
       deploymentTarget,
       marketingVersion,
+      appGroupIdentifier,
     })
 
     const productFile = addProductFile(xcodeProject, {

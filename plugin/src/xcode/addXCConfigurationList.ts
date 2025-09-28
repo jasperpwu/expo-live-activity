@@ -8,12 +8,14 @@ export function addXCConfigurationList(
     bundleIdentifier,
     deploymentTarget,
     marketingVersion,
+    appGroupIdentifier,
   }: {
     targetName: string
     currentProjectVersion: string
     bundleIdentifier: string
     deploymentTarget: string
     marketingVersion?: string
+    appGroupIdentifier: string
   }
 ) {
   const commonBuildSettings: any = {
@@ -56,6 +58,9 @@ export function addXCConfigurationList(
     APPLICATION_EXTENSION_API_ONLY: '"YES"',
     // DEVELOPMENT_TEAM: `"G76836P2D4"`,
   }
+
+  // Add app group identifier as preprocessor macro
+  commonBuildSettings.GCC_PREPROCESSOR_DEFINITIONS = `"APP_GROUP_IDENTIFIER=@\\"${appGroupIdentifier}\\""`
 
   const buildConfigurationsList = [
     {

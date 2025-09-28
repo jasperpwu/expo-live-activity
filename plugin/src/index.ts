@@ -8,6 +8,10 @@ import { withWidgetExtensionEntitlements } from './withWidgetExtensionEntitlemen
 import { withXcode } from './withXcode'
 
 const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) => {
+  if (!props?.appGroupIdentifier) {
+    throw new Error('expo-live-activity: appGroupIdentifier is required. Please specify it in your app.json plugins configuration.')
+  }
+
   const deploymentTarget = '16.2'
   const targetName = `${IOSConfig.XcodeUtils.sanitizedName(config.name)}LiveActivity`
   const bundleIdentifier = `${config.ios?.bundleIdentifier}.${targetName}`
@@ -29,6 +33,7 @@ const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) =
         targetName,
         bundleIdentifier,
         deploymentTarget,
+        appGroupIdentifier: props.appGroupIdentifier,
       },
     ],
     [withWidgetExtensionEntitlements, { targetName }],
