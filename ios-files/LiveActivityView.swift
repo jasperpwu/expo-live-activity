@@ -57,7 +57,7 @@ import WidgetKit
           Text(timerInterval: Date.toTimerInterval(miliseconds: date))
             .font(.system(size: 28, weight: .bold, design: .monospaced))
             .minimumScaleFactor(0.8)
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(.leading)
             .modifier(ConditionalForegroundViewModifier(color: attributes.progressViewLabelColor))
         } else if let progress = contentState.progress {
           ProgressView(value: progress)
