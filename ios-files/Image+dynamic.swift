@@ -33,8 +33,9 @@ extension Image {
 
     // Try to load from Asset Catalog first
     if let uiImage = UIImage(named: assetNameOrPath) {
-      NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath)")
+      NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath) - Size: \(uiImage.size)")
       return Image(uiImage: uiImage)
+        .renderingMode(.original) // Ensure image renders correctly
     }
 
     // Fallback to SwiftUI Image initializer
