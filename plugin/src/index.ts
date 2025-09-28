@@ -36,8 +36,8 @@ const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) =
         appGroupIdentifier: props.appGroupIdentifier,
       },
     ],
-    [withWidgetExtensionEntitlements, { targetName }],
-    [withConfig, { targetName, bundleIdentifier }],
+    [withWidgetExtensionEntitlements, { targetName, appGroupIdentifier: props.appGroupIdentifier }],
+    [withConfig, { targetName, bundleIdentifier, groupIdentifier: props.appGroupIdentifier }],
   ])
 
   if (props?.enablePushNotifications) {

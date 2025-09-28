@@ -31,7 +31,8 @@
       [
         "../app.plugin.js",
         {
-          "enablePushNotifications": true
+          "enablePushNotifications": true,
+          "appGroupIdentifier": "group.com.swmansion.expoliveactivity.example"
         }
       ]
     ]
