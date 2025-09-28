@@ -3,7 +3,7 @@ import plist from '@expo/plist'
 import { readFileSync, writeFileSync } from 'fs'
 import { join as joinPath } from 'path'
 
-const withPlist: ConfigPlugin<{ targetName: string }> = (expoConfig, { targetName }) =>
+const withPlist: ConfigPlugin<{ targetName: string; appGroupIdentifier: string }> = (expoConfig, { targetName, appGroupIdentifier }) =>
   withInfoPlist(expoConfig, (plistConfig) => {
     const scheme = typeof expoConfig.scheme === 'string' ? expoConfig.scheme : expoConfig.ios?.bundleIdentifier
 
@@ -17,6 +17,9 @@ const withPlist: ConfigPlugin<{ targetName: string }> = (expoConfig, { targetNam
           CFBundleURLSchemes: [scheme],
         },
       ]
+
+      // Add app group identifier to Info.plist
+      content.AppGroupIdentifier = appGroupIdentifier
 
       writeFileSync(filePath, plist.build(content))
     }

@@ -59,8 +59,7 @@ export function addXCConfigurationList(
     // DEVELOPMENT_TEAM: `"G76836P2D4"`,
   }
 
-  // Add app group identifier as preprocessor macro
-  commonBuildSettings.GCC_PREPROCESSOR_DEFINITIONS = `"APP_GROUP_IDENTIFIER=@\\"${appGroupIdentifier}\\""`
+  // App group identifier will be added to Info.plist instead of build settings
 
   const buildConfigurationsList = [
     {

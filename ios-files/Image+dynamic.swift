@@ -4,8 +4,8 @@ extension Image {
   static func dynamic(assetNameOrPath: String) -> Self {
     NSLog("[LiveActivity] Attempting to load image: \(assetNameOrPath)")
 
-    // Use configurable app group identifier from build settings
-    let groupIdentifier = APP_GROUP_IDENTIFIER
+    // Use configurable app group identifier from Info.plist
+    let groupIdentifier = Bundle.main.object(forInfoDictionaryKey: "AppGroupIdentifier") as? String ?? "group.expoLiveActivity.sharedData"
     NSLog("[LiveActivity] Attempting to access app group: \(groupIdentifier)")
 
     if let container = FileManager.default.containerURL(
