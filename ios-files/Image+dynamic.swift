@@ -56,10 +56,19 @@ extension Image {
       NSLog("[LiveActivity] ❌ Failed to load '\(assetNameOrPath)' from Asset Catalog (fallback)")
     }
 
-    // Fallback to SwiftUI Image initializer
-    NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer for: '\(assetNameOrPath)'")
-    let fallbackImage = Image(assetNameOrPath)
-    NSLog("[LiveActivity] 🔄 Final fallback - returning image object")
-    return fallbackImage
+    // Final fallback: try the default coffee bean image if we haven't already
+    if assetNameOrPath != "default-coffee-bean" {
+      NSLog("[LiveActivity] 🔄 Ultimate fallback: trying default-coffee-bean image")
+      if let uiImage = UIImage(named: "default-coffee-bean") {
+        NSLog("[LiveActivity] ✅ Successfully loaded default-coffee-bean as fallback")
+        return Image(uiImage: uiImage)
+          .renderingMode(.original)
+      }
+    }
+
+    // Last resort: return a SwiftUI system image
+    NSLog("[LiveActivity] ⚠️ All image loading failed, using system photo icon")
+    return Image(systemName: "photo")
+      .foregroundColor(.gray)
   }
 }
