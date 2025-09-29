@@ -69,6 +69,5 @@ extension Image {
     // Last resort: return a SwiftUI system image
     NSLog("[LiveActivity] ⚠️ All image loading failed, using system photo icon")
     return Image(systemName: "photo")
-      .foregroundColor(.gray)
   }
 }
