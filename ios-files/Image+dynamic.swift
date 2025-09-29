@@ -2,22 +2,24 @@ import SwiftUI
 
 extension Image {
   static func dynamic(assetNameOrPath: String) -> Self {
-    NSLog("[LiveActivity] Attempting to load image: \(assetNameOrPath)")
+    NSLog("[LiveActivity] 🖼️ Attempting to load image: '\(assetNameOrPath)'")
 
     // Use configurable app group identifier from Info.plist
     guard let groupIdentifier = Bundle.main.object(forInfoDictionaryKey: "AppGroupIdentifier") as? String else {
       NSLog("[LiveActivity] ❌ AppGroupIdentifier not found in Info.plist")
-      NSLog("[LiveActivity] 🔄 Falling back to bundle asset: \(assetNameOrPath)")
+      NSLog("[LiveActivity] 🔄 Falling back to bundle asset: '\(assetNameOrPath)'")
 
       // Try to load from Asset Catalog first
       if let uiImage = UIImage(named: assetNameOrPath) {
-        NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath) - Size: \(uiImage.size)")
+        NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
         return Image(uiImage: uiImage)
           .renderingMode(.original) // Ensure image renders correctly
+      } else {
+        NSLog("[LiveActivity] ❌ Failed to load '\(assetNameOrPath)' from Asset Catalog")
       }
 
       // Fallback to SwiftUI Image initializer
-      NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer: \(assetNameOrPath)")
+      NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer for: '\(assetNameOrPath)'")
       return Image(assetNameOrPath)
     }
     NSLog("[LiveActivity] Attempting to access app group: \(groupIdentifier)")
@@ -43,17 +45,21 @@ extension Image {
       NSLog("[LiveActivity] ❌ Cannot access app group '\(groupIdentifier)' - check entitlements and app group configuration")
     }
 
-    NSLog("[LiveActivity] 🔄 Falling back to bundle asset: \(assetNameOrPath)")
+    NSLog("[LiveActivity] 🔄 Falling back to bundle asset: '\(assetNameOrPath)'")
 
     // Try to load from Asset Catalog first
     if let uiImage = UIImage(named: assetNameOrPath) {
-      NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: \(assetNameOrPath) - Size: \(uiImage.size)")
+      NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
       return Image(uiImage: uiImage)
         .renderingMode(.original) // Ensure image renders correctly
+    } else {
+      NSLog("[LiveActivity] ❌ Failed to load '\(assetNameOrPath)' from Asset Catalog (fallback)")
     }
 
     // Fallback to SwiftUI Image initializer
-    NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer: \(assetNameOrPath)")
-    return Image(assetNameOrPath)
+    NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer for: '\(assetNameOrPath)'")
+    let fallbackImage = Image(assetNameOrPath)
+    NSLog("[LiveActivity] 🔄 Final fallback - returning image object")
+    return fallbackImage
   }
 }
