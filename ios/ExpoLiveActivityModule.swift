@@ -203,7 +203,9 @@ public class ExpoLiveActivityModule: Module {
           title: state.title,
           subtitle: state.subtitle,
           timerEndDateInMilliseconds: state.progressBar?.date,
-          progress: state.progressBar?.progress
+          progress: state.progressBar?.progress,
+          imageName: state.imageName,
+          dynamicIslandImageName: state.dynamicIslandImageName
         )
 
         let activity = try Activity.request(
