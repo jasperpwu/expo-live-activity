@@ -18,6 +18,18 @@ export const withXcode: ConfigPlugin<{
 }> = (config, { targetName, bundleIdentifier, deploymentTarget, appGroupIdentifier }) => {
   return withXcodeProject(config, (config) => {
     const xcodeProject = config.modResults
+
+    // Check if target already exists
+    const nativeTargets = xcodeProject.pbxNativeTargetSection()
+    const existingTarget = Object.keys(nativeTargets).find(
+      key => nativeTargets[key].name === targetName
+    )
+
+    if (existingTarget) {
+      console.log(`Target "${targetName}" already exists, skipping creation`)
+      return config
+    }
+
     const targetUuid = xcodeProject.generateUuid()
     const groupName = 'Embed Foundation Extensions'
     const { platformProjectRoot } = config.modRequest

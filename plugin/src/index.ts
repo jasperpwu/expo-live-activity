@@ -1,17 +1,18 @@
 import { IOSConfig, withPlugins, createRunOncePlugin } from 'expo/config-plugins'
-const { withTargetsDir } = require('@bacons/apple-targets/build/config-plugin')
 
 import type { LiveActivityConfigPlugin } from './types'
 import { withConfig } from './withConfig'
 import withPlist from './withPlist'
 import { withPushNotifications } from './withPushNotifications'
 import { withWidgetExtensionEntitlements } from './withWidgetExtensionEntitlements'
+import { withXcode } from './withXcode'
 
 const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) => {
   if (!props?.appGroupIdentifier) {
     throw new Error('expo-live-activity: appGroupIdentifier is required. Please specify it in your app.json plugins configuration.')
   }
 
+  const deploymentTarget = '16.2'
   const targetName = `${IOSConfig.XcodeUtils.sanitizedName(config.name)}LiveActivity`
   const bundleIdentifier = `${config.ios?.bundleIdentifier}.${targetName}`
 
@@ -25,9 +26,16 @@ const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) =
   }
 
   config = withPlugins(config, [
-    // Use @bacons/apple-targets to handle Xcode target creation
-    [withTargetsDir, { appleTeamId: props.appleTeamId, root: 'ios-files' }],
     [withPlist, { targetName, appGroupIdentifier: props.appGroupIdentifier }],
+    [
+      withXcode,
+      {
+        targetName,
+        bundleIdentifier,
+        deploymentTarget,
+        appGroupIdentifier: props.appGroupIdentifier,
+      },
+    ],
     [withWidgetExtensionEntitlements, { targetName, appGroupIdentifier: props.appGroupIdentifier }],
     [withConfig, { targetName, bundleIdentifier, groupIdentifier: props.appGroupIdentifier }],
   ])
@@ -42,5 +50,5 @@ const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) =
 export default createRunOncePlugin(
   withWidgetsAndLiveActivities,
   'expo-live-activity',
-  '1.0.0'
+  '0.2.1'
 )
