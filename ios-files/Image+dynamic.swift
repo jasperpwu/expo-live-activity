@@ -29,8 +29,10 @@ extension Image {
       NSLog("[LiveActivity] 🔍 UIImage scale: \(uiImage.scale), renderingMode: \(uiImage.renderingMode.rawValue)")
       NSLog("[LiveActivity] 🔍 UIImage CGImage is nil: \(uiImage.cgImage == nil)")
       NSLog("[LiveActivity] 🔍 UIImage CIImage is nil: \(uiImage.ciImage == nil)")
-      return Image(uiImage: uiImage)
-        .renderingMode(.original)
+
+      // Force rendering mode to original to prevent template rendering
+      let fixedImage = uiImage.withRenderingMode(.alwaysOriginal)
+      return Image(uiImage: fixedImage)
     }
 
     NSLog("[LiveActivity] ❌ Failed to load '\(assetNameOrPath)' from Asset Catalog")
