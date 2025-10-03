@@ -9,8 +9,8 @@ extension Image {
       NSLog("[LiveActivity] ❌ AppGroupIdentifier not found in Info.plist")
       NSLog("[LiveActivity] 🔄 Falling back to bundle asset: '\(assetNameOrPath)'")
 
-      // Try to load from Asset Catalog first
-      if let uiImage = UIImage(named: assetNameOrPath) {
+      // Try to load from Asset Catalog first (check main bundle and current bundle)
+      if let uiImage = UIImage(named: assetNameOrPath, in: Bundle.main, with: nil) ?? UIImage(named: assetNameOrPath) {
         NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
         return Image(uiImage: uiImage)
           .renderingMode(.original) // Ensure image renders correctly
@@ -22,7 +22,7 @@ extension Image {
       NSLog("[LiveActivity] 💡 Using SwiftUI Image initializer for: '\(assetNameOrPath)'")
       return Image(assetNameOrPath)
     }
-    NSLog("[LiveActivity] Attempting to access app group: \(groupIdentifier)")
+    NSLog("[LiveActivity] ✅ App group found: \(groupIdentifier)")
 
     if let container = FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: groupIdentifier
@@ -45,10 +45,12 @@ extension Image {
       NSLog("[LiveActivity] ❌ Cannot access app group '\(groupIdentifier)' - check entitlements and app group configuration")
     }
 
+    NSLog("[LiveActivity] 🔄 App group path failed, falling back to bundle assets")
+
     NSLog("[LiveActivity] 🔄 Falling back to bundle asset: '\(assetNameOrPath)'")
 
-    // Try to load from Asset Catalog first
-    if let uiImage = UIImage(named: assetNameOrPath) {
+    // Try to load from Asset Catalog first (check main bundle and current bundle)
+    if let uiImage = UIImage(named: assetNameOrPath, in: Bundle.main, with: nil) ?? UIImage(named: assetNameOrPath) {
       NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
       return Image(uiImage: uiImage)
         .renderingMode(.original) // Ensure image renders correctly
@@ -59,7 +61,7 @@ extension Image {
     // Final fallback: try the default coffee bean image if we haven't already
     if assetNameOrPath != "default-coffee-bean" {
       NSLog("[LiveActivity] 🔄 Ultimate fallback: trying default-coffee-bean image")
-      if let uiImage = UIImage(named: "default-coffee-bean") {
+      if let uiImage = UIImage(named: "default-coffee-bean", in: Bundle.main, with: nil) ?? UIImage(named: "default-coffee-bean") {
         NSLog("[LiveActivity] ✅ Successfully loaded default-coffee-bean as fallback")
         return Image(uiImage: uiImage)
           .renderingMode(.original)
