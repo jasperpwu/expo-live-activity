@@ -60,5 +60,7 @@
     "react": "*",
     "react-native": "*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@bacons/apple-targets": "^3.0.5"
+  }
 }

@@ -14,6 +14,20 @@ export function addToPbxNativeTargetSection(
     xCConfigurationList: { uuid: string }
   }
 ) {
+  // Check if target already exists
+  const nativeTargets = xcodeProject.pbxNativeTargetSection()
+  const existingTarget = Object.keys(nativeTargets).find(
+    key => nativeTargets[key].name === targetName
+  )
+
+  if (existingTarget) {
+    // Return existing target instead of creating a duplicate
+    return {
+      uuid: existingTarget,
+      pbxNativeTarget: nativeTargets[existingTarget],
+    }
+  }
+
   const target = {
     uuid: targetUuid,
     pbxNativeTarget: {
