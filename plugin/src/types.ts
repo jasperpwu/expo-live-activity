@@ -1,6 +1,6 @@
 import { ConfigPlugin } from '@expo/config-plugins'
 
-interface ConfigPluginProps {
+export interface ConfigPluginProps {
   enablePushNotifications?: boolean
   appGroupIdentifier: string
 }

@@ -1,4 +1,4 @@
-import { IOSConfig, withPlugins } from 'expo/config-plugins'
+import { IOSConfig, withPlugins, createRunOncePlugin } from 'expo/config-plugins'
 
 import type { LiveActivityConfigPlugin } from './types'
 import { withConfig } from './withConfig'
@@ -47,4 +47,8 @@ const withWidgetsAndLiveActivities: LiveActivityConfigPlugin = (config, props) =
   return config
 }
 
-export default withWidgetsAndLiveActivities
+export default createRunOncePlugin(
+  withWidgetsAndLiveActivities,
+  'expo-live-activity',
+  '1.0.0'
+)
