@@ -93,12 +93,22 @@ public class ExpoLiveActivityModule: Module {
   private func updateImages(
     state: LiveActivityState, newState: inout LiveActivityAttributes.ContentState
   ) async throws {
+    NSLog("[LiveActivity] 📸 updateImages called")
+
     if let name = state.imageName {
+      NSLog("[LiveActivity] 🖼️ Processing imageName: '\(name)'")
       newState.imageName = try await resolveImage(from: name)
+      NSLog("[LiveActivity] ✅ Set newState.imageName to: '\(newState.imageName ?? "nil")'")
+    } else {
+      NSLog("[LiveActivity] ⚠️ No imageName provided in state")
     }
 
     if let name = state.dynamicIslandImageName {
+      NSLog("[LiveActivity] 🏝️ Processing dynamicIslandImageName: '\(name)'")
       newState.dynamicIslandImageName = try await resolveImage(from: name)
+      NSLog("[LiveActivity] ✅ Set newState.dynamicIslandImageName to: '\(newState.dynamicIslandImageName ?? "nil")'")
+    } else {
+      NSLog("[LiveActivity] ⚠️ No dynamicIslandImageName provided in state")
     }
   }
 
