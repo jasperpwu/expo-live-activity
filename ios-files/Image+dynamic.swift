@@ -6,10 +6,29 @@ extension Image {
     NSLog("[LiveActivity] 🔍 Bundle.main path: \(Bundle.main.bundlePath)")
     NSLog("[LiveActivity] 🔍 Bundle.main identifier: \(Bundle.main.bundleIdentifier ?? "nil")")
 
+    // Log available asset catalogs
+    if let assetsPath = Bundle.main.path(forResource: "Assets", ofType: "car") {
+      NSLog("[LiveActivity] 📂 Found Assets.car at: \(assetsPath)")
+    } else {
+      NSLog("[LiveActivity] ❌ Assets.car not found in bundle")
+    }
+
+    // List all resources in bundle
+    if let resourcePath = Bundle.main.resourcePath {
+      do {
+        let contents = try FileManager.default.contentsOfDirectory(atPath: resourcePath)
+        NSLog("[LiveActivity] 📁 Bundle resources: \(contents.prefix(10).joined(separator: ", "))")
+      } catch {
+        NSLog("[LiveActivity] ❌ Could not list bundle contents: \(error)")
+      }
+    }
+
     // Try to load from Asset Catalog
     if let uiImage = UIImage(named: assetNameOrPath, in: Bundle.main, with: nil) ?? UIImage(named: assetNameOrPath) {
       NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
       NSLog("[LiveActivity] 🔍 UIImage scale: \(uiImage.scale), renderingMode: \(uiImage.renderingMode.rawValue)")
+      NSLog("[LiveActivity] 🔍 UIImage CGImage is nil: \(uiImage.cgImage == nil)")
+      NSLog("[LiveActivity] 🔍 UIImage CIImage is nil: \(uiImage.ciImage == nil)")
       return Image(uiImage: uiImage)
         .renderingMode(.original)
     }
