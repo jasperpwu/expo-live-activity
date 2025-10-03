@@ -3,10 +3,13 @@ import SwiftUI
 extension Image {
   static func dynamic(assetNameOrPath: String) -> Self {
     NSLog("[LiveActivity] 🖼️ Attempting to load image: '\(assetNameOrPath)'")
+    NSLog("[LiveActivity] 🔍 Bundle.main path: \(Bundle.main.bundlePath)")
+    NSLog("[LiveActivity] 🔍 Bundle.main identifier: \(Bundle.main.bundleIdentifier ?? "nil")")
 
     // Try to load from Asset Catalog
     if let uiImage = UIImage(named: assetNameOrPath, in: Bundle.main, with: nil) ?? UIImage(named: assetNameOrPath) {
       NSLog("[LiveActivity] ✅ Successfully loaded from Asset Catalog: '\(assetNameOrPath)' - Size: \(uiImage.size)")
+      NSLog("[LiveActivity] 🔍 UIImage scale: \(uiImage.scale), renderingMode: \(uiImage.renderingMode.rawValue)")
       return Image(uiImage: uiImage)
         .renderingMode(.original)
     }
