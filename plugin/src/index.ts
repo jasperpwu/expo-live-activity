@@ -1,5 +1,5 @@
 import { IOSConfig, withPlugins, createRunOncePlugin } from 'expo/config-plugins'
-import { withTargetsDir } from '@bacons/apple-targets/build/config-plugin'
+const { withTargetsDir } = require('@bacons/apple-targets/build/config-plugin')
 
 import type { LiveActivityConfigPlugin } from './types'
 import { withConfig } from './withConfig'
