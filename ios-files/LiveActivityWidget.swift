@@ -10,6 +10,7 @@ struct LiveActivityAttributes: ActivityAttributes {
     var progress: Double?
     var imageName: String?
     var dynamicIslandImageName: String?
+    var dynamicIslandText: String?
   }
 
   var name: String
@@ -67,17 +68,27 @@ struct LiveActivityWidget: Widget {
           }
         }
       } compactLeading: {
-        resizableImage(imageName: {
-          let imageName = context.state.dynamicIslandImageName ?? "default-coffee-bean"
-          if context.state.dynamicIslandImageName == nil {
-            NSLog("[LiveActivity] Using default coffee bean image for Dynamic Island compact")
-          } else {
-            NSLog("[LiveActivity] Using custom image for Dynamic Island compact: \(context.state.dynamicIslandImageName!)")
+        HStack(spacing: 4) {
+          resizableImage(imageName: {
+            let imageName = context.state.dynamicIslandImageName ?? "default-coffee-bean"
+            if context.state.dynamicIslandImageName == nil {
+              NSLog("[LiveActivity] Using default coffee bean image for Dynamic Island compact")
+            } else {
+              NSLog("[LiveActivity] Using custom image for Dynamic Island compact: \(context.state.dynamicIslandImageName!)")
+            }
+            return imageName
+          }())
+            .frame(maxWidth: 23, maxHeight: 23)
+
+          if let dynamicIslandText = context.state.dynamicIslandText {
+            Text(dynamicIslandText)
+              .font(.system(size: 15))
+              .minimumScaleFactor(0.8)
+              .fontWeight(.semibold)
+              .lineLimit(1)
           }
-          return imageName
-        }())
-          .frame(maxWidth: 23, maxHeight: 23)
-          .applyWidgetURL(from: context.attributes.deepLinkUrl)
+        }
+        .applyWidgetURL(from: context.attributes.deepLinkUrl)
       } compactTrailing: {
         if let date = context.state.timerEndDateInMilliseconds {
           compactTimer(

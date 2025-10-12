@@ -135,6 +135,7 @@ The `state` object should include:
   };
   imageName?: string; // Matches the name of the image in 'assets/liveActivity'
   dynamicIslandImageName?: string; // Matches the name of the image in 'assets/liveActivity'
+  dynamicIslandText?: string; // Text to display next to the image on the left side of the dynamic island compact view.
 };
 ```
 
@@ -171,6 +172,7 @@ const state: LiveActivity.LiveActivityState = {
   },
   imageName: 'live_activity_image',
   dynamicIslandImageName: 'dynamic_island_image',
+  dynamicIslandText: '5 min', // Optional: text to show next to the image in dynamic island
 }
 
 const config: LiveActivity.LiveActivityConfig = {
@@ -233,7 +235,8 @@ Example payload for starting Live Activity:
       "timerEndDateInMilliseconds": 1754410997000,
       "progress": 0.5,
       "imageName": "live_activity_image",
-      "dynamicIslandImageName": "dynamic_island_image"
+      "dynamicIslandImageName": "dynamic_island_image",
+      "dynamicIslandText": "5 min"
     },
     "timestamp": 1754491435000, // timestamp of when the push notification was sent
     "attributes-type": "LiveActivityAttributes",
@@ -267,7 +270,8 @@ Example payload for updating Live Activity:
       "subtitle": "World",
       "timerEndDateInMilliseconds": 1754064245000,
       "imageName": "live_activity_image",
-      "dynamicIslandImageName": "dynamic_island_image"
+      "dynamicIslandImageName": "dynamic_island_image",
+      "dynamicIslandText": "2 min"
     },
     "timestamp": 1754063621319 // timestamp of when the push notification was sent
   }
