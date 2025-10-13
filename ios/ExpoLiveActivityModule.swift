@@ -25,6 +25,9 @@ public class ExpoLiveActivityModule: Module {
 
     @Field
     var dynamicIslandImageName: String?
+
+    @Field
+    var dynamicIslandText: String?
   }
 
   struct LiveActivityConfig: Record {
@@ -205,7 +208,8 @@ public class ExpoLiveActivityModule: Module {
           timerEndDateInMilliseconds: state.progressBar?.date,
           progress: state.progressBar?.progress,
           imageName: state.imageName,
-          dynamicIslandImageName: state.dynamicIslandImageName
+          dynamicIslandImageName: state.dynamicIslandImageName,
+          dynamicIslandText: state.dynamicIslandText
         )
 
         let activity = try Activity.request(
@@ -241,7 +245,10 @@ public class ExpoLiveActivityModule: Module {
           title: state.title,
           subtitle: state.subtitle,
           timerEndDateInMilliseconds: state.progressBar?.date,
-          progress: state.progressBar?.progress
+          progress: state.progressBar?.progress,
+          imageName: nil,
+          dynamicIslandImageName: nil,
+          dynamicIslandText: state.dynamicIslandText
         )
         try await updateImages(state: state, newState: &newState)
         await activity.end(
@@ -268,7 +275,10 @@ public class ExpoLiveActivityModule: Module {
           title: state.title,
           subtitle: state.subtitle,
           timerEndDateInMilliseconds: state.progressBar?.date,
-          progress: state.progressBar?.progress
+          progress: state.progressBar?.progress,
+          imageName: nil,
+          dynamicIslandImageName: nil,
+          dynamicIslandText: state.dynamicIslandText
         )
         try await updateImages(state: state, newState: &newState)
         await activity.update(ActivityContent(state: newState, staleDate: nil))
