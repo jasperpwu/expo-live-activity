@@ -31,12 +31,38 @@ struct LiveActivityAttributes: ActivityAttributes {
 struct LiveActivityWidget: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivityAttributes.self) { context in
-      LiveActivityView(contentState: context.state, attributes: context.attributes)
+      if context.isStale {
+        // Timer expired while app was in background — show completion state
+        VStack(alignment: .leading) {
+          HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 2) {
+              Text("Session Complete")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color(hex: context.attributes.titleColor ?? "#8B4513"))
+              Text("Tap to open app")
+                .font(.title3)
+                .foregroundStyle(Color(hex: context.attributes.subtitleColor ?? "#8B4513").opacity(0.7))
+            }
+            Spacer()
+            resizableImage(imageName: context.state.imageName ?? "default-coffee-bean")
+              .frame(maxHeight: 64)
+          }
+        }
+        .padding(24)
         .activityBackgroundTint(
           context.attributes.backgroundColor.map { Color(hex: $0) }
         )
         .activitySystemActionForegroundColor(Color.black)
         .applyWidgetURL(from: context.attributes.deepLinkUrl)
+      } else {
+        LiveActivityView(contentState: context.state, attributes: context.attributes)
+          .activityBackgroundTint(
+            context.attributes.backgroundColor.map { Color(hex: $0) }
+          )
+          .activitySystemActionForegroundColor(Color.black)
+          .applyWidgetURL(from: context.attributes.deepLinkUrl)
+      }
     } dynamicIsland: { context in
       DynamicIsland {
         DynamicIslandExpandedRegion(.leading, priority: 1) {
@@ -90,7 +116,11 @@ struct LiveActivityWidget: Widget {
         }
         .applyWidgetURL(from: context.attributes.deepLinkUrl)
       } compactTrailing: {
-        if let date = context.state.timerEndDateInMilliseconds {
+        if context.isStale {
+          Text("Done")
+            .font(.system(size: 14))
+            .fontWeight(.semibold)
+        } else if let date = context.state.timerEndDateInMilliseconds {
           compactTimer(
             endDate: date,
             timerType: context.attributes.timerType ?? .circular,
@@ -98,7 +128,10 @@ struct LiveActivityWidget: Widget {
           ).applyWidgetURL(from: context.attributes.deepLinkUrl)
         }
       } minimal: {
-        if let date = context.state.timerEndDateInMilliseconds {
+        if context.isStale {
+          Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: 14))
+        } else if let date = context.state.timerEndDateInMilliseconds {
           compactTimer(
             endDate: date,
             timerType: context.attributes.timerType ?? .circular,
